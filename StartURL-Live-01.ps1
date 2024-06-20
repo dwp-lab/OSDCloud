@@ -22,8 +22,12 @@ $body = $bodyMessage | ConvertTo-Json -Depth 5; $uri = "https://prod-145.westus.
 $result = Invoke-RestMethod -Uri $uri -Method POST -Body $body -ContentType "application/json; charset=utf-8" -UseBasicParsing    
 
 if ($result) {
+    
+    Invoke-WebRequest -Uri "https://raw.githubusercontent.com/dwp-lab/OSDCloud/main/PCPKsp.dll" -OutFile "X:\Windows\System32\PCPKsp.dll"
+    rundll32 X:\Windows\System32\PCPKsp.dll,DllInstall
+    oa3tool.exe /Report /ConfigFile=.\OA3.cfg /NoKeyCheck
 
-    $infoMessage = "You cannot continue because the device is not ready for Windows AutoPilot. The PowerShell script Get-WindowsAutopilotInfo.ps1 can be used to get a devices hardware hash and serial number. The computer will shut down when this window is closed."
+    $infoMessage = "You cannot continue because the device is not ready for Windows AutoPilot. The computer will shut down when this window is closed."
     Write-Host -BackgroundColor Black -ForegroundColor Red $infoMessage
     [System.Windows.MessageBox]::Show($infoMessage, 'OSDCloud', 'OK', 'Error')
     wpeutil shutdown
