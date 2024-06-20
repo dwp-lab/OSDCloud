@@ -21,7 +21,7 @@ Write-Host -BackgroundColor Black -ForegroundColor Green "Start AutoPilot Verifi
 $body = $bodyMessage | ConvertTo-Json -Depth 5; $uri = "https://prod-145.westus.logic.azure.com:443/workflows/dadfcaca1bcc4b069c998a99e82ee728/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=n0urWoGWa2OXN-4ba0U7UwfEM8i9vwTuSHx2PrSVtvU"
 $result = Invoke-RestMethod -Uri $uri -Method POST -Body $body -ContentType "application/json; charset=utf-8" -UseBasicParsing    
 
-if ($result) {
+if ($result.Response.value) {
 
     Invoke-WebRequest -Uri "https://github.com/dwp-lab/OSDCloud/raw/main/PCPKsp.dll" -OutFile X:\Windows\System32\PCPKsp.dll
     rundll32 X:\Windows\System32\PCPKsp.dll,DllInstall
@@ -42,10 +42,11 @@ if ($result) {
             "Device Serial Number" = $serialNumber
             "Windows Product ID" = $product
             "Hardware Hash" = $hash
+            "Group Tag" = 'MEM-Global-Standard'
         }
 
         $computers += $c
-        $computers | Select-Object "Device Serial Number", "Windows Product ID", "Hardware Hash" | ConvertTo-CSV -NoTypeInformation | ForEach-Object {$_ -replace '"',''} | Out-File AutopilotHWID.csv
+        $computers | Select-Object "Device Serial Number", "Windows Product ID", "Hardware Hash", "Group Tag" | ConvertTo-CSV -NoTypeInformation | ForEach-Object {$_ -replace '"',''} | Out-File AutopilotHWID.csv
         
         $usbMedia = Get-WmiObject -Namespace "root\cimv2" -Query "SELECT * FROM Win32_LogicalDisk WHERE DriveType = 2"
         foreach ($disk in $usbMedia) {
