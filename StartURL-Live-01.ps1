@@ -22,10 +22,27 @@ $body = $bodyMessage | ConvertTo-Json -Depth 5; $uri = "https://prod-145.westus.
 $result = Invoke-RestMethod -Uri $uri -Method POST -Body $body -ContentType "application/json; charset=utf-8" -UseBasicParsing    
 
 if ($result) {
-    
+
     Invoke-WebRequest -Uri "https://raw.githubusercontent.com/dwp-lab/OSDCloud/main/PCPKsp.dll" -OutFile "X:\Windows\System32\PCPKsp.dll"
     rundll32 X:\Windows\System32\PCPKsp.dll,DllInstall
+
+    Remove-Item OA3.xml -ErrorAction:SilentlyContinue
     oa3tool.exe /Report /ConfigFile=.\OA3.cfg /NoKeyCheck
+
+    Invoke-WebRequest -Uri "https://raw.githubusercontent.com/dwp-lab/OSDCloud/main/OA3.xml"
+    [xml]$xmlhash = Get-Content -Path .\OA3.xml
+    $hash=$xmlhash.Key.HardwareHash
+
+    $computers = @(); $product = ""
+
+    $c = New-Object psobject -Property @{
+        "Device Serial Number" = $serial
+        "Windows Product ID" = $product
+        "Hardware Hash" = $hash
+    }
+
+    $computers += $c
+    $computers | Select-Object "Device Serial Number", "Windows Product ID", "Hardware Hash" | ConvertTo-CSV -NoTypeInformation | % {$_ -replace '"',''} | Out-File AutopilotHWID.csv
 
     $infoMessage = "You cannot continue because the device is not ready for Windows AutoPilot. The computer will shut down when this window is closed."
     Write-Host -BackgroundColor Black -ForegroundColor Red $infoMessage
