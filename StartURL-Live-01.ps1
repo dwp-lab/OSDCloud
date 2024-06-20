@@ -29,21 +29,25 @@ if ($result) {
     Invoke-WebRequest -Uri "https://github.com/dwp-lab/OSDCloud/raw/main/OA3.cfg" -OutFile OA3.cfg
     Invoke-WebRequest -Uri "https://github.com/dwp-lab/OSDCloud/raw/main/oa3tool.exe" -OutFile oa3tool.exe
     Remove-Item .\OA3.xml -ErrorAction:SilentlyContinue
-    oa3tool.exe /Report /ConfigFile=.\OA3.cfg /NoKeyCheck
+    .\oa3tool.exe /Report /ConfigFile=.\OA3.cfg /NoKeyCheck
 
-    [xml]$xmlhash = Get-Content -Path .\OA3.xml
-    $hash=$xmlhash.Key.HardwareHash
+    if (Test-Path .\OA3.xml) {
 
-    $computers = @(); $product = ""
+        [xml]$xmlhash = Get-Content -Path .\OA3.xml
+        $hash=$xmlhash.Key.HardwareHash
 
-    $c = New-Object psobject -Property @{
-        "Device Serial Number" = $serial
-        "Windows Product ID" = $product
-        "Hardware Hash" = $hash
+        $computers = @(); $product = ""
+
+        $c = New-Object psobject -Property @{
+            "Device Serial Number" = $serial
+            "Windows Product ID" = $product
+            "Hardware Hash" = $hash
+        }
+
+        $computers += $c
+        $computers | Select-Object "Device Serial Number", "Windows Product ID", "Hardware Hash" | ConvertTo-CSV -NoTypeInformation | % {$_ -replace '"',''} | Out-File AutopilotHWID.csv
+        Copy-Item -Path .\AutopilotHWID.csv -Destination D:\$serialNumber.csv -Force
     }
-
-    $computers += $c
-    $computers | Select-Object "Device Serial Number", "Windows Product ID", "Hardware Hash" | ConvertTo-CSV -NoTypeInformation | % {$_ -replace '"',''} | Out-File AutopilotHWID.csv
 
     $infoMessage = "You cannot continue because the device is not ready for Windows AutoPilot. The computer will shut down when this window is closed."
     Write-Host -BackgroundColor Black -ForegroundColor Red $infoMessage
