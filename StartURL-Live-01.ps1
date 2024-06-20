@@ -13,7 +13,7 @@ if ($serialNumber) {
 
     $infoMessage = "We were unable to locate the serial number of your device, so the process cannot proceed. The computer will shut down when this window is closed."
     Write-Host -BackgroundColor Black -ForegroundColor Red $infoMessage
-    [System.Windows.MessageBox]::Show($infoMessage, 'OSDCloud', 'OK', 'Error')
+    [System.Windows.MessageBox]::Show($infoMessage, 'OSDCloud', 'OK', 'Error') | Out-Null
     wpeutil shutdown
 }
 
@@ -39,7 +39,7 @@ if ($result) {
         $computers = @(); $product = ""
 
         $c = New-Object psobject -Property @{
-            "Device Serial Number" = $serial
+            "Device Serial Number" = $serialNumber
             "Windows Product ID" = $product
             "Hardware Hash" = $hash
         }
@@ -55,7 +55,7 @@ if ($result) {
 
     $infoMessage = "You cannot continue because the device is not ready for Windows AutoPilot. The computer will shut down when this window is closed."
     Write-Host -BackgroundColor Black -ForegroundColor Red $infoMessage
-    [System.Windows.MessageBox]::Show($infoMessage, 'OSDCloud', 'OK', 'Error')
+    [System.Windows.MessageBox]::Show($infoMessage, 'OSDCloud', 'OK', 'Error') | Out-Null
     wpeutil shutdown
     
 } else {
