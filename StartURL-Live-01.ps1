@@ -45,8 +45,12 @@ if ($result) {
         }
 
         $computers += $c
-        $computers | Select-Object "Device Serial Number", "Windows Product ID", "Hardware Hash" | ConvertTo-CSV -NoTypeInformation | % {$_ -replace '"',''} | Out-File AutopilotHWID.csv
-        Copy-Item -Path .\AutopilotHWID.csv -Destination D:\$serialNumber.csv -Force
+        $computers | Select-Object "Device Serial Number", "Windows Product ID", "Hardware Hash" | ConvertTo-CSV -NoTypeInformation | ForEach-Object {$_ -replace '"',''} | Out-File AutopilotHWID.csv
+        
+        $usbMedia = Get-WmiObject -Namespace "root\cimv2" -Query "SELECT * FROM Win32_LogicalDisk WHERE DriveType = 2"
+        foreach ($disk in $usbMedia) {
+            Copy-Item -Path .\AutopilotHWID.csv -Destination "$($disk.DeviceID)\$($serialNumber).csv" -Force -ErrorAction:SilentlyContinue
+        }
     }
 
     $infoMessage = "You cannot continue because the device is not ready for Windows AutoPilot. The computer will shut down when this window is closed."
