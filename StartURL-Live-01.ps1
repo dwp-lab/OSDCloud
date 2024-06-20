@@ -26,10 +26,11 @@ if ($result) {
     Invoke-WebRequest -Uri "https://raw.githubusercontent.com/dwp-lab/OSDCloud/main/PCPKsp.dll" -OutFile "X:\Windows\System32\PCPKsp.dll"
     rundll32 X:\Windows\System32\PCPKsp.dll,DllInstall
 
+    Invoke-WebRequest -Uri "https://raw.githubusercontent.com/dwp-lab/OSDCloud/main/OA3.cfg"
     Remove-Item OA3.xml -ErrorAction:SilentlyContinue
     oa3tool.exe /Report /ConfigFile=.\OA3.cfg /NoKeyCheck
 
-    Invoke-WebRequest -Uri "https://raw.githubusercontent.com/dwp-lab/OSDCloud/main/OA3.xml"
+    
     [xml]$xmlhash = Get-Content -Path .\OA3.xml
     $hash=$xmlhash.Key.HardwareHash
 
