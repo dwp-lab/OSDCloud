@@ -1,7 +1,7 @@
 Set-ExecutionPolicy RemoteSigned -Force -Scope CurrentUser
 $StartTime = Get-Date; Write-Host "Start Time: $($StartTime.ToString("hh:mm:ss"))"
 Start-Sleep -Seconds 10
-Start-Transcript -Path 'C:\Windows\OSDCloud\Logs\Install-LCU.log' -ErrorAction Ignore
+Start-Transcript -Path 'C:\Windows\Temp\Install-LCU.log' -ErrorAction Ignore
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
 Install-PackageProvider -Name NuGet -Force -Scope AllUsers | Out-Null
