@@ -18,16 +18,16 @@ if ($serialNumber) {
 }
 
 Write-Host -BackgroundColor Black -ForegroundColor Green "Start AutoPilot Verification"
-$body = $bodyMessage | ConvertTo-Json -Depth 5; $uri = "https://prod-145.westus.logic.azure.com:443/workflows/dadfcaca1bcc4b069c998a99e82ee728/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=n0urWoGWa2OXN-4ba0U7UwfEM8i9vwTuSHx2PrSVtvU"
+$body = $bodyMessage | ConvertTo-Json -Depth 5; $uri = 'https://prod-145.westus.logic.azure.com:443/workflows/dadfcaca1bcc4b069c998a99e82ee728/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=n0urWoGWa2OXN-4ba0U7UwfEM8i9vwTuSHx2PrSVtvU'
 $result = Invoke-RestMethod -Uri $uri -Method POST -Body $body -ContentType "application/json; charset=utf-8" -UseBasicParsing    
 
 if ($result.Response -eq 0) {
 
-    Invoke-WebRequest -Uri "https://github.com/dwp-lab/OSDCloud/raw/main/PCPKsp.dll" -OutFile X:\Windows\System32\PCPKsp.dll
+    Invoke-WebRequest -Uri 'https://github.com/dwp-lab/OSDCloud/raw/main/PCPKsp.dll' -OutFile X:\Windows\System32\PCPKsp.dll
     rundll32 X:\Windows\System32\PCPKsp.dll,DllInstall
 
-    Invoke-WebRequest -Uri "https://github.com/dwp-lab/OSDCloud/raw/main/OA3.cfg" -OutFile OA3.cfg
-    Invoke-WebRequest -Uri "https://github.com/dwp-lab/OSDCloud/raw/main/oa3tool.exe" -OutFile oa3tool.exe
+    Invoke-WebRequest -Uri 'https://github.com/dwp-lab/OSDCloud/raw/main/OA3.cfg' -OutFile OA3.cfg
+    Invoke-WebRequest -Uri 'https://github.com/dwp-lab/OSDCloud/raw/main/oa3tool.exe' -OutFile oa3tool.exe
     Remove-Item .\OA3.xml -ErrorAction:SilentlyContinue
     .\oa3tool.exe /Report /ConfigFile=.\OA3.cfg /NoKeyCheck
 
@@ -63,7 +63,7 @@ if ($result.Response -eq 0) {
 } elseif ($result.Response -eq 1) {
 
     Write-Host -BackgroundColor Black -ForegroundColor Green "Update OSD PowerShell Module"
-    Install-Module OSD -Force -SkippublisherCheck
+    Install-Module OSD -Force -SkipPublisherCheck
 
     Write-Host -BackgroundColor Black -ForegroundColor Green "Import OSD PowerShell Module"
     Import-Module OSD -Force
@@ -72,14 +72,15 @@ if ($result.Response -eq 0) {
     Start-OSDCloud -ZTI -OSVersion 'Windows 11' -OSBuild 24H2 -OSEdition Enterprise -OSLanguage en-us -OSLicense Retail
 
     Write-Host -BackgroundColor Black -ForegroundColor Green "Stage SetupComplete"
-    New-Item -ItemType Directory -Force -Path "C:\Windows\Setup\Scripts" | Out-Null
-    Invoke-WebRequest -Uri "https://github.com/dwp-lab/OSDCloud/raw/main/SetupComplete.cmd" -OutFile C:\OSDCloud\Scripts\SetupComplete\SetupComplete.cmd
-    Invoke-WebRequest -Uri "https://github.com/dwp-lab/OSDCloud/raw/main/UpdateWindows.ps1" -OutFile C:\OSDCloud\Scripts\SetupComplete\UpdateWindows.ps1
+    Invoke-WebRequest -Uri 'https://github.com/dwp-lab/OSDCloud/raw/main/SetupComplete.cmd' -OutFile C:\OSDCloud\Scripts\SetupComplete\SetupComplete.cmd
+    Invoke-WebRequest -Uri 'https://github.com/dwp-lab/OSDCloud/raw/main/Install-LCU.ps1' -OutFile C:\OSDCloud\Scripts\SetupComplete\Install-LCU.ps1
+    Save-Module -Name PSWindowsUpdate -Path 'C:\Program Files\WindowsPowerShell\Modules' -Force
     (Get-Content 'C:\Windows\Setup\Scripts\SetupComplete.ps1') -replace "C:\\Windows\\Temp\\osdcloud-logs\\SetupComplete.log","C:\\OSDCloud\\Logs\\SetupComplete.log" | Set-Content 'C:\Windows\Setup\Scripts\SetupComplete.ps1'
 
     Write-Host -BackgroundColor Black -ForegroundColor Green "Restart in 20 seconds"
     Start-Sleep -Seconds 20
     wpeutil reboot
+    
 } else {
 
     $infoMessage = "Unexpected 'Response' value: $($result.Response). Expected 0 or 1. Cannot continue. The computer will shut down when this window is closed."
