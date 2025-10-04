@@ -1,8 +1,5 @@
 Set-ExecutionPolicy RemoteSigned -Force -Scope CurrentUser
-
-Start-Transcript -Path "$env:SystemRoot\OSDCloud\Logs\Install-LCU.log" -Append | Out-Null
-
-Set-ExecutionPolicy Bypass -Scope Process -Force
+Start-Transcript -Path "$env:SystemRoot\Temp\Install-LCU.log"
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
 Install-PackageProvider -Name NuGet -Force -Scope AllUsers | Out-Null
