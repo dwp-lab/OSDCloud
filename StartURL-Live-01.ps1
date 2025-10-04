@@ -83,10 +83,10 @@ if ($result.Response -eq 0) {
     
 } else {
 
-    $infoMessage = "Unexpected 'Response' value: $($result.Response). Expected 0 or 1. Cannot continue. The computer will shut down when this window is closed."
+    $infoMessage = "Unexpected response value. Cannot continue. The computer will shut down when this window is closed."
     Write-Host -BackgroundColor Black -ForegroundColor Red $infoMessage
     [System.Windows.MessageBox]::Show($infoMessage, 'OSDCloud', 'OK', 'Error') | Out-Null
-    wpeutil shutdown
+    wpeutil reboot
 }
 
 

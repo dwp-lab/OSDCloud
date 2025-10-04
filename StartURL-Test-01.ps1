@@ -7,7 +7,7 @@ Write-Host -BackgroundColor Black -ForegroundColor Green "Import OSD PowerShell 
 Import-Module OSD -Force
 
 Write-Host -BackgroundColor Black -ForegroundColor Green "Start OSDCloud"
-Start-OSDCloud -ZTI -OSVersion 'Windows 11' -OSBuild 23H2 -OSEdition Enterprise -OSLanguage en-us -OSLicense Retail
+Start-OSDCloud -ZTI -OSVersion 'Windows 11' -OSBuild 24H2 -OSEdition Enterprise -OSLanguage en-us -OSLicense Retail
 
 Write-Host -BackgroundColor Black -ForegroundColor Green "Restart in 20 seconds"
 Start-Sleep -Seconds 20

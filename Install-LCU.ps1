@@ -1,4 +1,5 @@
 Start-Sleep -Seconds 10
+# Install-Module PSWindowsUpdate -Force -Scope AllUsers
 Import-Module PSWindowsUpdate -Force -Scope AllUsers
 
 # Pull latest SSU/LCU + critical updates and reboot automatically if needed
