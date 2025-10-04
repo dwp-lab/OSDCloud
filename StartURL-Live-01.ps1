@@ -74,7 +74,8 @@ if ($result.Response -eq 0) {
     Write-Host -BackgroundColor Black -ForegroundColor Green "Stage SetupComplete"
     New-Item -ItemType Directory -Force -Path "C:\Windows\Setup\Scripts" | Out-Null
     Invoke-WebRequest -Uri "https://github.com/dwp-lab/OSDCloud/raw/main/SetupComplete.cmd" -OutFile C:\OSDCloud\Scripts\SetupComplete\SetupComplete.cmd
-    Invoke-WebRequest -Uri "https://github.com/dwp-lab/OSDCloud/raw/main/Install-LCU.ps1" -OutFile C:\OSDCloud\Scripts\SetupComplete\Install-LCU.ps1
+    Invoke-WebRequest -Uri "https://github.com/dwp-lab/OSDCloud/raw/main/UpdateWindows.ps1" -OutFile C:\OSDCloud\Scripts\SetupComplete\UpdateWindows.ps1
+    (Get-Content 'C:\Windows\Setup\Scripts\SetupComplete.ps1') -replace "C:\\Windows\\Temp\\osdcloud-logs\\SetupComplete.log","C:\\OSDCloud\\Logs\\SetupComplete.log" | Set-Content 'C:\Windows\Setup\Scripts\SetupComplete.ps1'
 
     Write-Host -BackgroundColor Black -ForegroundColor Green "Restart in 20 seconds"
     Start-Sleep -Seconds 20
@@ -86,6 +87,7 @@ if ($result.Response -eq 0) {
     [System.Windows.MessageBox]::Show($infoMessage, 'OSDCloud', 'OK', 'Error') | Out-Null
     wpeutil shutdown
 }
+
 
 
 
