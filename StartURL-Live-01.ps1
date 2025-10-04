@@ -74,12 +74,13 @@ if ($result.Response -eq 0) {
     Write-Host -BackgroundColor Black -ForegroundColor Green "Stage SetupComplete"
     New-Item -ItemType Directory -Force -Path "C:\Windows\Setup\Scripts" | Out-Null
 
-    Invoke-WebRequest -Uri "https://github.com/dwp-lab/OSDCloud/raw/main/SetupComplete.cmd" -OutFile C:\Windows\Setup\Scripts\SetupComplete.cmd
-    Invoke-WebRequest -Uri "https://github.com/dwp-lab/OSDCloud/raw/main/Install-LCU.ps1" -OutFile C:\Windows\Setup\Scripts\Install-LCU.ps1
+    Invoke-WebRequest -Uri "https://github.com/dwp-lab/OSDCloud/raw/main/SetupComplete.cmd" -OutFile C:\OSDCloud\Scripts\SetupComplete\SetupComplete.cmd
+    Invoke-WebRequest -Uri "https://github.com/dwp-lab/OSDCloud/raw/main/Install-LCU.ps1" -OutFile C:\OSDCloud\Scripts\SetupComplete\Install-LCU.ps1
 
     Write-Host -BackgroundColor Black -ForegroundColor Green "Restart in 20 seconds"
     Start-Sleep -Seconds 20
     wpeutil reboot
 
 }
+
 
