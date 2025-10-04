@@ -73,7 +73,6 @@ if ($result.Response -eq 0) {
 
     Write-Host -BackgroundColor Black -ForegroundColor Green "Stage SetupComplete"
     New-Item -ItemType Directory -Force -Path "C:\Windows\Setup\Scripts" | Out-Null
-
     Invoke-WebRequest -Uri "https://github.com/dwp-lab/OSDCloud/raw/main/SetupComplete.cmd" -OutFile C:\OSDCloud\Scripts\SetupComplete\SetupComplete.cmd
     Invoke-WebRequest -Uri "https://github.com/dwp-lab/OSDCloud/raw/main/Install-LCU.ps1" -OutFile C:\OSDCloud\Scripts\SetupComplete\Install-LCU.ps1
 
@@ -87,6 +86,7 @@ if ($result.Response -eq 0) {
     [System.Windows.MessageBox]::Show($infoMessage, 'OSDCloud', 'OK', 'Error') | Out-Null
     wpeutil shutdown
 }
+
 
 
 
