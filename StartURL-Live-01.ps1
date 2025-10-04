@@ -60,7 +60,7 @@ if ($result.Response -eq 0) {
     [System.Windows.MessageBox]::Show($infoMessage, 'OSDCloud', 'OK', 'Error') | Out-Null
     wpeutil shutdown
     
-} else {
+} elseif ($result.Response -eq 1) {
 
     Write-Host -BackgroundColor Black -ForegroundColor Green "Update OSD PowerShell Module"
     Install-Module OSD -Force -SkippublisherCheck
@@ -80,7 +80,13 @@ if ($result.Response -eq 0) {
     Write-Host -BackgroundColor Black -ForegroundColor Green "Restart in 20 seconds"
     Start-Sleep -Seconds 20
     wpeutil reboot
+} else {
 
+    $infoMessage = "Unexpected 'Response' value: $($result.Response). Expected 0 or 1. Cannot continue. The computer will shut down when this window is closed."
+    Write-Host -BackgroundColor Black -ForegroundColor Red $infoMessage
+    [System.Windows.MessageBox]::Show($infoMessage, 'OSDCloud', 'OK', 'Error') | Out-Null
+    wpeutil shutdown
 }
+
 
 
