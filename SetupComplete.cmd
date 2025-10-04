@@ -1,2 +1,1 @@
-:: Run the PowerShell updater silently on first boot
-powershell.exe -ExecutionPolicy Bypass -File "%SystemRoot%\Setup\Scripts\Install-LCU.ps1"
+powershell.exe -ExecutionPolicy Bypass -File C:\OSDCloud\Scripts\SetupComplete\SetupComplete.ps1
