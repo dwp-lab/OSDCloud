@@ -47,6 +47,13 @@ if (Test-Path $SetupCompletePath) {
     Write-Host "No custom SetupComplete.cmd found at $SetupCompletePath"
 }
 
+# Sets property in registry to disable Windows automatic encrytion from start during oobe phase, it does not block Intune bitlocker policy from encrypting devices post enrollment.  
+# https://learn.microsoft.com/en-us/windows/security/operating-system-security/data-protection/bitlocker/
+Write-Host -BackgroundColor Black -ForegroundColor Green "Disable Windows Automatic Encryption"
+if (-not (Test-Path 'HKLM:\SYSTEM\CurrentControlSet\Control\BitLocker')) { 
+    New-Item -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\BitLocker' -Force | Out-Null}
+New-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\BitLocker' -Name 'PreventDeviceEncryption' -Value 1 -PropertyType DWord -Force | Out-Null
+
 # Restore Balanced plan after tasks
 Write-Host 'Setting PowerPlan to Balanced'
 Set-PowerSettingTurnMonitorOffAfter -PowerSource AC -Minutes 15
