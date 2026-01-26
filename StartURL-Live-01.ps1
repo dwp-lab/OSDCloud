@@ -63,19 +63,21 @@ if ($result.Response -eq 0) {
 } elseif ($result.Response -eq 1) {
 
     Write-Host -BackgroundColor Black -ForegroundColor Green "Update OSD PowerShell Module"
-    Install-Module OSD -Force -SkipPublisherCheck
+    Install-Module OSD -RequiredVersion 25.12.22.4 -Force -SkipPublisherCheck
 
     Write-Host -BackgroundColor Black -ForegroundColor Green "Import OSD PowerShell Module"
-    Import-Module OSD -Force
+    Import-Module OSD -RequiredVersion 25.12.22.4 -Force
 
-    function Invoke-ParseDate {
+    <#
+	function Invoke-ParseDate {
     param (
         [String] $DateString
     )
     $Array = $DateString.Split("/")
     Get-Date -Year $Array[2] -Month $Array[0] -Day $Array[1]
 	}
-
+	#>
+	
     Write-Host -BackgroundColor Black -ForegroundColor Green "Start OSDCloud"
     Start-OSDCloud -ZTI -OSVersion 'Windows 11' -OSBuild 24H2 -OSEdition Enterprise -OSLanguage en-us -OSLicense Retail
 
@@ -96,6 +98,7 @@ if ($result.Response -eq 0) {
     [System.Windows.MessageBox]::Show($infoMessage, 'OSDCloud', 'OK', 'Error') | Out-Null
     wpeutil reboot
 }
+
 
 
 
