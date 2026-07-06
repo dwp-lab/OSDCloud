@@ -16,5 +16,12 @@ while ($tries -lt 3) {
     $tries++
     Start-Sleep -Seconds 60
   }
-
 }
+
+# Trigger Microsoft Edge update (https://char.learnwebcoding.com/help/windows_versions_software_bundled.html)
+try {
+    Start-Process -FilePath "C:\Program Files (x86)\Microsoft\EdgeUpdate\MicrosoftEdgeUpdate.exe" `
+        -ArgumentList "/silent /install appguid={56EB18F8-B008-4CBD-B6D2-8C97FE7E9062}&appname=Microsoft%20Edge&needsadmin=True" `
+        -Wait -ErrorAction Stop
+}
+catch {}
