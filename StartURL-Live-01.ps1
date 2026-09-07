@@ -77,7 +77,7 @@ if ($result.Response -eq 0) {
 	}
 	
     Write-Host -BackgroundColor Black -ForegroundColor Green "Start OSDCloud"
-    Start-OSDCloud -ZTI -OSVersion 'Windows 11' -OSBuild 24H2 -OSEdition Enterprise -OSLanguage en-us -OSLicense Retail
+    Start-OSDCloud -ZTI -OSVersion 'Windows 11' -OSBuild 25H2 -OSEdition Enterprise -OSLanguage en-us -OSLicense Retail
 
     Write-Host -BackgroundColor Black -ForegroundColor Green "Stage SetupComplete"
     Save-Module -Name PSWindowsUpdate -Path 'C:\Program Files\WindowsPowerShell\Modules' -Force # Stage PSWindowsUpdate so it's available after first boot (no PSGallery needed in pre-OOBE)
