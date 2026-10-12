@@ -10,7 +10,7 @@ Import-Module PSWindowsUpdate -Force
 $tries = 0
 while ($tries -lt 3) {
   try {
-    Get-WindowsUpdate -MicrosoftUpdate -Category "Security Updates","Critical Updates","Updates" -AcceptAll -Install -IgnoreReboot
+    Get-WindowsUpdate -MicrosoftUpdate -Category "Security Updates","Critical Updates","Updates","Definition Updates" -AcceptAll -Install -IgnoreReboot
     break
   } catch {
     $tries++
