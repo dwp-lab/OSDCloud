@@ -11,6 +11,7 @@ $tries = 0
 while ($tries -lt 3) {
   try {
     Get-WindowsUpdate -MicrosoftUpdate -Category "Security Updates","Critical Updates","Updates","Definition Updates" -AcceptAll -Install -IgnoreReboot
+    Get-WindowsUpdate -MicrosoftUpdate -KBArticleID KB4052623 -AcceptAll -Install -IgnoreReboot -ErrorAction Stop
     break
   } catch {
     $tries++
